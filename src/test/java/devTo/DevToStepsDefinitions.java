@@ -1,6 +1,8 @@
 package devTo;
 
 import devToPages.MainPage;
+import devToPages.PodcastsPage;
+import devToPages.SinglePodcastPage;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -52,15 +54,15 @@ public class DevToStepsDefinitions {
     @And("I select the first podcast from list")
     public void i_select_the_first_podcast_from_list() {
         wait.until(ExpectedConditions.urlToBe(podcastBtnHref));
-        WebElement firstPodcast = driver.findElement(By.cssSelector("div.articles-list > div > a:first-child"));  //selenium znajdzie pierwszy elemenet o tagu h3
-        podcastHrefFromList = firstPodcast.getAttribute("href");
-        WebElement firstPodcastClickable = driver.findElement(By.tagName("h3"));
-        firstPodcastClickable.click();
+        PodcastsPage podcastsPage = new PodcastsPage(driver);
+        podcastHrefFromList = podcastsPage.firstPodcast.getAttribute("href");
+        podcastsPage.selectFirstPodcast();
     }
     @And("I play the podcast")
     public void i_play_the_podcast() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("record")));
-        driver.findElement(By.className("record")).click();
+        SinglePodcastPage singlePodcastPage = new SinglePodcastPage(driver);
+        wait.until(ExpectedConditions.visibilityOf(singlePodcastPage.playButton));
+        singlePodcastPage.playPodcast();
     }
 
     @Then("I should be redirected to {string} page")
@@ -71,17 +73,18 @@ public class DevToStepsDefinitions {
     }
     @Then("I should be redirected to valid podcast page")
     public void i_should_be_redirected_to_valid_podcast_page() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("record")));
+        SinglePodcastPage singlePodcastPage = new SinglePodcastPage(driver);
+        wait.until(ExpectedConditions.visibilityOf(singlePodcastPage.playButton));
         String actualUrl = driver.getCurrentUrl();
         Assert.assertEquals("Podcasts aren't the same",podcastHrefFromList,actualUrl);
     }
     @Then("Podcast should be played")
     public void podcast_should_be_played() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("record-wrapper")));
-        WebElement recordWrapper = driver.findElement(By.className("record-wrapper"));
-        recordWrapper.click();
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("status-message")));
-        boolean isRecordWrapperPlaying = recordWrapper.getAttribute("class").contains("playing");
+        SinglePodcastPage singlePodcastPage = new SinglePodcastPage(driver);
+        wait.until(ExpectedConditions.visibilityOf(singlePodcastPage.recordWrapper));
+        singlePodcastPage.playPodcast();
+        wait.until(ExpectedConditions.invisibilityOf(singlePodcastPage.initializing));
+        boolean isRecordWrapperPlaying = singlePodcastPage.recordWrapper.getAttribute("class").contains("playing");
         Assert.assertTrue(isRecordWrapperPlaying);
     }
 }

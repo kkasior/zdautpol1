@@ -15,7 +15,7 @@ public class MainPage {
     @FindBy(xpath = "//a[@href='/top/month']")
     public WebElement monthBtn;
 
-    @FindBy(xpath = "//a[@href=\"https://dev.to/pod\"]")
+    @FindBy(xpath = "//a[@href='https://dev.to/pod']")
     public WebElement podcastBtn;
 
     public MainPage(WebDriver driver) {
