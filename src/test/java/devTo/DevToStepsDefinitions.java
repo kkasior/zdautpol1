@@ -3,16 +3,15 @@ package devTo;
 import devToPages.MainPage;
 import devToPages.PodcastsPage;
 import devToPages.SinglePodcastPage;
+import driver.BaseDriver;
+import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -28,8 +27,8 @@ public class DevToStepsDefinitions {
 
     @Before
     public void setup(){
-        System.setProperty("webdriver.chrome.driver","chromedriver/chromedriver.exe");
-        driver = new ChromeDriver();
+        BaseDriver baseDriver = new BaseDriver();
+        driver = baseDriver.initializeChromeDriverInHeadlessMode();
         wait = new WebDriverWait(driver, 10);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS); //zanim wywalisz nosuchelementexception poczekaj przez 10 sek i co sekundę sprawdzaj czy element jest juz na stronie, dziala przy wszystkich kolejnych findElement() lub findElements()
     }
@@ -86,5 +85,9 @@ public class DevToStepsDefinitions {
         wait.until(ExpectedConditions.invisibilityOf(singlePodcastPage.initializing));
         boolean isRecordWrapperPlaying = singlePodcastPage.recordWrapper.getAttribute("class").contains("playing");
         Assert.assertTrue(isRecordWrapperPlaying);
+    }
+    @After
+    public void tearDown(){
+        driver.quit();
     }
 }
