@@ -1,0 +1,11 @@
+image:  rvancea/maven-chrome-jdk8:latest
+
+build:
+  stage: build
+  script:
+    - mvn compile -DtestingType=a
+
+test:
+  stage: test
+  script:
+    - mvn -Dtest=DevToTestRunner -DtestingType=headless test
