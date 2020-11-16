@@ -6,25 +6,22 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class MainPage {
+    @FindBy(xpath = "//a[@href='/top/week']")
+    public WebElement weekBtn;
+    @FindBy(xpath = "//a[@href='/top/month']")
+    public WebElement monthBtn;
+    @FindBy(xpath = "//a[@href='https://dev.to/pod']")
+    public WebElement podcastBtn;
     WebDriver driver;
     String url = "https://dev.to";
 
-    @FindBy(xpath = "//a[@href='/top/week']")
-    public WebElement weekBtn;
-
-    @FindBy(xpath = "//a[@href='/top/month']")
-    public WebElement monthBtn;
-
-    @FindBy(xpath = "//a[@href='https://dev.to/pod']")
-    public WebElement podcastBtn;
-
     public MainPage(WebDriver driver) {
         this.driver = driver;
-        PageFactory.initElements(driver,this);
+        PageFactory.initElements(driver, this);
         driver.get(url);
     }
 
-    public void goToWeek(){
+    public void goToWeek() {
         weekBtn.click();
     }
 
@@ -32,7 +29,7 @@ public class MainPage {
         monthBtn.click();
     }
 
-    public void goToPocasts(){
+    public void goToPocasts() {
         podcastBtn.click();
     }
 }

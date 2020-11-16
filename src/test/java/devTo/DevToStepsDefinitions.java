@@ -26,7 +26,7 @@ public class DevToStepsDefinitions {
     MainPage mainPage;
 
     @Before
-    public void setup(){
+    public void setup() {
         BaseDriver baseDriver = new BaseDriver();
         driver = baseDriver.initializeChromeDriverInHeadlessMode();
         wait = new WebDriverWait(driver, 10);
@@ -37,19 +37,23 @@ public class DevToStepsDefinitions {
     public void i_am_on_the_dev_to_main_page() {
         mainPage = new MainPage(driver);
     }
+
     @When("I click on week button")
     public void i_click_on_week_button() {
         mainPage.goToWeek();
     }
+
     @When("I click on month button")
     public void iClickOnMonthButton() {
         mainPage.goToMonth();
     }
+
     @When("I go to podcasts page")
     public void i_go_to_podcasts_page() {
         podcastBtnHref = mainPage.podcastBtn.getAttribute("href");
         mainPage.goToPocasts();
     }
+
     @And("I select the first podcast from list")
     public void i_select_the_first_podcast_from_list() {
         wait.until(ExpectedConditions.urlToBe(podcastBtnHref));
@@ -57,6 +61,7 @@ public class DevToStepsDefinitions {
         podcastHrefFromList = podcastsPage.firstPodcast.getAttribute("href");
         podcastsPage.selectFirstPodcast();
     }
+
     @And("I play the podcast")
     public void i_play_the_podcast() {
         SinglePodcastPage singlePodcastPage = new SinglePodcastPage(driver);
@@ -70,13 +75,15 @@ public class DevToStepsDefinitions {
         String title = driver.getTitle();
         Assert.assertTrue(title.contains(expected));
     }
+
     @Then("I should be redirected to valid podcast page")
     public void i_should_be_redirected_to_valid_podcast_page() {
         SinglePodcastPage singlePodcastPage = new SinglePodcastPage(driver);
         wait.until(ExpectedConditions.visibilityOf(singlePodcastPage.playButton));
         String actualUrl = driver.getCurrentUrl();
-        Assert.assertEquals("Podcasts aren't the same",podcastHrefFromList,actualUrl);
+        Assert.assertEquals("Podcasts aren't the same", podcastHrefFromList, actualUrl);
     }
+
     @Then("Podcast should be played")
     public void podcast_should_be_played() {
         SinglePodcastPage singlePodcastPage = new SinglePodcastPage(driver);
@@ -86,8 +93,9 @@ public class DevToStepsDefinitions {
         boolean isRecordWrapperPlaying = singlePodcastPage.recordWrapper.getAttribute("class").contains("playing");
         Assert.assertTrue(isRecordWrapperPlaying);
     }
+
     @After
-    public void tearDown(){
+    public void tearDown() {
         driver.quit();
     }
 }
